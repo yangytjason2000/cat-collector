@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+Flask-RESTful
+requests
+psycopg2
+python-dotenv
