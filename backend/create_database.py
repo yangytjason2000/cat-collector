@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2 import sql
 from dotenv import load_dotenv
 import requests
-from app import app
+from app import create_app
 from models import db, Cat
 
 load_dotenv()
@@ -63,6 +63,7 @@ if __name__ == '__main__':
     db_port = os.getenv('DB_PORT')
 
     create_database_and_schema('cat_collector', db_username, db_password, port=db_port)
-
+    
+    app = create_app()
     with app.app_context():
         fetch_random_cats()

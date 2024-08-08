@@ -5,3 +5,4 @@ Flask-RESTful
 requests
 psycopg2
 python-dotenv
+pytest

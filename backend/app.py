@@ -7,10 +7,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
-CORS(app)
-api = Api(app)
-init_db(app)
+def create_app(test_config=None):
+    app = Flask(__name__)
+    CORS(app)
+
+    app.config.from_mapping(
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
+    )
+
+    if test_config is not None:
+        app.config.from_mapping(test_config)
+
+    init_db(app)
+    api = Api(app)
+
+    api.add_resource(CatList, '/cats')
+    api.add_resource(CatDetail, '/cats/<int:cat_id>')
+
+    return app
 
 class CatList(Resource):
     #Return a list of all cats in the database based on page number and limit, used for pagination
@@ -56,8 +70,7 @@ class CatDetail(Resource):
         db.session.commit()
         return jsonify({'message': 'Cat removed from favorites', 'cat': cat_id})
 
-api.add_resource(CatList, '/cats')
-api.add_resource(CatDetail, '/cats/<int:cat_id>')
 
 if __name__ == '__main__':
+    app = create_app()
     app.run(debug=True)

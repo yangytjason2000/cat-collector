@@ -35,7 +35,7 @@ This guide will help you set up the website by configuring the environment, sett
      - On **Windows**:
 
        ```bash
-       .venv\\Scripts\\activate
+       .venv\Scripts\activate
        ```
 
      - On **macOS/Linux**:
@@ -94,6 +94,19 @@ This guide will help you set up the website by configuring the environment, sett
 
 After following these steps, your website should be up and running. You can access the frontend and backend servers through their respective URLs.
 
+# Testing
+
+1. **Navigate to the Backend Directory in your virtual environment:**
+
+   ```bash
+   cd backend
+   ```
+
+2. **Simply run pytest**
+
+   ```bash
+   pytest
+   ```
 
 # API Documentation
 
