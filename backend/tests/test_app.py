@@ -32,7 +32,7 @@ def test_get_cats(client):
 #Test for the GET /cats/{id} endpoint
 def test_get_cat_detail(client):
     with client.application.app_context():
-        new_cat = Cat(api_id='1', image_url='http://example.com/cat.jpg', name='cat1', description='A nice cat')
+        new_cat = Cat(api_id='1', image_url='http://example.com/cat.jpg', name='cat1', description='A nice cat', breed='Siamese')
         db.session.add(new_cat)
         db.session.commit()
 
@@ -48,13 +48,14 @@ def test_get_cat_detail(client):
         'image_url': 'http://example.com/cat.jpg',
         'name': 'cat1',
         'description': 'A nice cat',
+        'breed': 'Siamese',
         'is_favorite': False
     }
 
 #Test for the POST /cats endpoint of adding a cat to favorite
 def test_post_cat_favorite(client):
     with client.application.app_context():
-        new_cat = Cat(api_id='2', image_url='http://example.com/cat2.jpg', name='cat2', description='A cute cat')
+        new_cat = Cat(api_id='2', image_url='http://example.com/cat2.jpg', name='cat2', description='A cute cat', breed='Siamese')
         db.session.add(new_cat)
         db.session.commit()
 
@@ -73,13 +74,13 @@ def test_post_cat_favorite(client):
 #Test for the PUT /cats/{id} endpoint of updating detail of a cat
 def test_put_cat_detail(client):
     with client.application.app_context():
-        new_cat = Cat(api_id='3', image_url='http://example.com/cat3.jpg', name='cat3', description='A curious cat')
+        new_cat = Cat(api_id='3', image_url='http://example.com/cat3.jpg', name='cat3', description='A curious cat', breed='Siamese')
         db.session.add(new_cat)
         db.session.commit()
 
         cat_id = new_cat.id
 
-    response = client.put(f'/cats/{cat_id}', json={'name': 'Name updated', 'description': 'Description updated'})
+    response = client.put(f'/cats/{cat_id}', json={'name': 'Name updated', 'description': 'Description updated', 'breed': 'Breed updated'})
 
     assert response.status_code == 200
 
@@ -89,11 +90,12 @@ def test_put_cat_detail(client):
         updated_cat = db.session.get(Cat, cat_id)
         assert updated_cat.name == 'Name updated'
         assert updated_cat.description == 'Description updated'
+        assert updated_cat.breed == 'Breed updated'
 
 #Test for the DELETE /cats/{id} endpoint of removing a cat from favorite
 def test_delete_cat_favorite(client):
     with client.application.app_context():
-        new_cat = Cat(api_id='4', image_url='http://example.com/cat4.jpg', name='cat4', description='A interesting cat')
+        new_cat = Cat(api_id='4', image_url='http://example.com/cat4.jpg', name='cat4', description='A interesting cat', breed='')
         db.session.add(new_cat)
         db.session.commit()
 

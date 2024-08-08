@@ -118,11 +118,12 @@ This section provides detailed information about the available API endpoints, in
 - **Parameters:**
   - `page` (optional, default: 1): The page number for pagination.
   - `limit` (optional, default: 10): The number of cats to retrieve per page.
+  - `breed` (optional, default: ''): The breed of cats to retrieve.
 - **Response:**
-  - Returns a list of cat objects with the following fields: `id`, `api_id`, `image_url`, `name`, `description`, and `is_favorite`.
+  - Returns a list of cat objects with the following fields: `id`, `api_id`, `image_url`, `name`, `description`, `breed` and `is_favorite`.
 - **Example Request:**
   ```http
-  GET /cats?page=1&limit=10
+  GET /cats?page=1&limit=10&breed=Siamese
   ```
 - **Example Response:**
   ```json
@@ -133,6 +134,7 @@ This section provides detailed information about the available API endpoints, in
       "image_url": "https://example.com/cat1.jpg",
       "name": "cat1",
       "description": "A good cat.",
+      "breed": "Siamese",
       "is_favorite": false
     },
     {
@@ -141,6 +143,7 @@ This section provides detailed information about the available API endpoints, in
       "image_url": "https://example.com/cat2.jpg",
       "name": "cat2",
       "description": "A cool cat.",
+      "breed": "Siamese",
       "is_favorite": true
     }
   ]
@@ -176,7 +179,7 @@ This section provides detailed information about the available API endpoints, in
 - **Parameters:**
   - `cat_id` (required): The ID of the cat to retrieve.
 - **Response:**
-  - Returns a cat object with the fields: `id`, `api_id`, `image_url`, `name`, `description`, and `is_favorite`.
+  - Returns a cat object with the fields: `id`, `api_id`, `image_url`, `name`, `description`, `breed` and `is_favorite`.
 - **Example Request:**
   ```http
   GET /cats/1
@@ -189,6 +192,7 @@ This section provides detailed information about the available API endpoints, in
     "image_url": "https://example.com/cat1.jpg",
     "name": "cat1",
     "description": "A good cat.",
+    "breed": "Siamese",
     "is_favorite": false
   }
   ```
@@ -201,6 +205,7 @@ This section provides detailed information about the available API endpoints, in
 - **Request Body:**
   - `name` (optional): The new name of the cat.
   - `description` (optional): The new description of the cat.
+  - `breed` (optional): The new breed of the cat.
 - **Response:**
   - Returns a success message and the ID of the updated cat.
 - **Example Request:**

@@ -8,6 +8,7 @@ class Cat(db.Model):
     image_url = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(100))
     description = db.Column(db.String(255))
+    breed = db.Column(db.String(255))
 
     favorite = db.relationship('FavoriteCat', back_populates='cat', uselist=False)
 

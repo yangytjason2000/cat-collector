@@ -4,6 +4,7 @@ from flask_cors import CORS
 from models import Cat, FavoriteCat
 from database import db, init_db
 from dotenv import load_dotenv
+from sqlalchemy import func
 
 load_dotenv()
 
@@ -31,13 +32,19 @@ class CatList(Resource):
     def get(self):
         page = request.args.get('page', 1, type=int)
         limit = request.args.get('limit', 10, type=int)
+        breed = request.args.get('breed', '', type=str)
 
-        pagination = Cat.query.order_by(Cat.id).paginate(page=page, per_page=limit, error_out=False)
+        query = Cat.query
+
+        if breed:
+            query = query.filter(func.lower(Cat.breed) == func.lower(breed))
+
+        pagination = query.order_by(Cat.id).paginate(page=page, per_page=limit, error_out=False)
     
         cats = pagination.items
 
         return jsonify([{'id': cat.id, 'api_id': cat.api_id, 'image_url': cat.image_url,
-                         'name': cat.name, 'description': cat.description, 'is_favorite': cat.favorite is not None} for cat in cats])
+                         'name': cat.name, 'description': cat.description, 'breed': cat.breed, 'is_favorite': cat.favorite is not None} for cat in cats])
 
     #Add a new cat to the favorite table, indicating the cat being added to favorite_cat
     def post(self):
@@ -52,7 +59,7 @@ class CatDetail(Resource):
     def get(self, cat_id):
         cat = db.session.get(Cat,cat_id)
         return jsonify({'id': cat.id, 'api_id': cat.api_id, 'image_url': cat.image_url,
-                        'name': cat.name, 'description': cat.description, 'is_favorite': cat.favorite is not None})
+                        'name': cat.name, 'description': cat.description, 'breed': cat.breed, 'is_favorite': cat.favorite is not None})
 
     #Update name or description of a cat by a given id
     def put(self, cat_id):
@@ -60,6 +67,7 @@ class CatDetail(Resource):
         data = request.json
         cat.name = data.get('name', cat.name)
         cat.description = data.get('description', cat.description)
+        cat.breed = data.get('breed', cat.breed)
         db.session.commit()
         return jsonify({'message': 'Cat updated', 'cat': cat_id})
 

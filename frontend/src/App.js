@@ -3,26 +3,30 @@ import axios from 'axios';
 import CatCard from "./components/CatCard";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Modal from "./components/Modal";
+import Header from "./components/Header";
 
 function App() {
   const [catsData, setCatsData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [selectedCat, setSelectedCat] = useState(null);
+  const [selectedBreed, setSelectedBreed] = useState('');
 
   //initial page load
   useEffect(() => {
-    loadCats(page);
-  }, [page]);
+    loadCats(page, selectedBreed);
+  }, [page, selectedBreed]);
 
   //Fetch data from the backend for a given page
-  const loadCats = (page) => {
+  const loadCats = (page, selectedBreed) => {
     axios
-      .get(`http://localhost:5000/cats`, { params: { page, limit: 10 } })
+      .get(`http://localhost:5000/cats`, { params: { page, limit: 10, breed: selectedBreed} })
       .then((response) => {
         const newCats = response.data;
-        setCatsData((prevCats) => [...prevCats, ...newCats]);
-        setHasMore(newCats.length > 0);
+        setCatsData((prevCats) =>
+          page === 1 ? newCats : [...prevCats, ...newCats]
+        );
+        setHasMore(newCats.length === 10);
       })
       .catch((error) => {
         console.error('Error fetching cat data:', error);
@@ -63,6 +67,7 @@ function App() {
       .put(`http://localhost:5000/cats/${updatedCat.id}`, {
         name: updatedCat.name,
         description: updatedCat.description,
+        breed: updatedCat.breed,
       })
       .then((response) => {
         console.log(response.data.message);
@@ -77,6 +82,12 @@ function App() {
       });
   };
 
+  const onApplySearch = (breed) => {
+    setCatsData([]);
+    setSelectedBreed(breed);
+    setPage(1);
+  }
+
   //Set the cat that need to be displayed in the pop up modal
   const handleCardClick = (cat) => {
     setSelectedCat(cat);
@@ -88,7 +99,7 @@ function App() {
 
   return (
     <div className="bg-slate-400 min-h-screen w-full">
-      <h1 className="text-3xl font-bold underline text-center">Cat Collector</h1>
+      <Header breed={selectedBreed} onApplySearch={onApplySearch}/>
       <InfiniteScroll
         dataLength={catsData.length}
         next={fetchMoreData}

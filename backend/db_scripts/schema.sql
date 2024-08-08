@@ -3,7 +3,8 @@ CREATE TABLE cats (
     api_id VARCHAR(100) UNIQUE NOT NULL,
     image_url VARCHAR(255) NOT NULL,
     name VARCHAR(100),
-    description VARCHAR(255)
+    description VARCHAR(255),
+    breed VARCHAR(255)
 );
 
 CREATE TABLE favorite_cats (

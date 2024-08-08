@@ -1,13 +1,15 @@
 import React from "react";
+import { useState } from "react";
 
 function Modal({ isVisible, onClose, onSubmit, cat }) {
   //Modal is a pop up for user to submit detail info about the cat
-  const [name, setName] = React.useState(cat.name);
-  const [description, setDescription] = React.useState(cat.description || "");
+  const [name, setName] = useState(cat.name);
+  const [description, setDescription] = useState(cat.description);
+  const [breed, setBreed] = useState(cat.breed);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ ...cat, name, description });
+    onSubmit({ ...cat, name, description, breed});
     onClose();
   };
 
@@ -25,6 +27,15 @@ function Modal({ isVisible, onClose, onSubmit, cat }) {
               className="mt-1 p-2 border w-full"
               value={name}
               onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Breed:</label>
+            <input
+              type="text"
+              className="mt-1 p-2 border w-full"
+              value={breed}
+              onChange={(e) => setBreed(e.target.value)}
             />
           </div>
           <div className="mb-4">
