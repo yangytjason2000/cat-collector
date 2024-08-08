@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 function CatCard({ cat, onToggleFavorite, onCardClick }) {
+  const [isPulsing, setIsPulsing] = useState(false);
+
   //To handle on click behavior for the like button
   const handleFavoriteClick = (e) => {
-    //Prevent active the setModalVisble when click on like button
+    //Prevent active the setModalVisible when click on like button
     e.stopPropagation();
+    if (!cat.is_favorite) {
+      setIsPulsing(true);
+    }
     onToggleFavorite(cat.id, cat.is_favorite);
+
+    if (!cat.is_favorite) {
+      setTimeout(() => {
+        setIsPulsing(false);
+      }, 1000);
+    }
   };
 
   //To handle when user click on the whole card to see detail information
@@ -37,13 +48,13 @@ function CatCard({ cat, onToggleFavorite, onCardClick }) {
         >
           {cat.is_favorite ? (
             <>
-              <AiFillHeart className="text-red-500 mr-2" />
-              <span className="text-gray-800">Liked</span>
+              <AiFillHeart className={`text-red-500 mr-2 ${isPulsing ? "pulse" : ""}`} />
+              <span className="w-12 text-center text-gray-800">Liked</span>
             </>
           ) : (
             <>
               <AiOutlineHeart className="text-gray-500 mr-2" />
-              <span className="text-gray-800">Like</span>
+              <span className="w-12 text-center text-gray-800">Like</span>
             </>
           )}
         </button>
