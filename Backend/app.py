@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
+from flask_cors import CORS
 from models import Cat, FavoriteCat
 from database import db, init_db
 from dotenv import load_dotenv
@@ -7,13 +8,20 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 init_db(app)
 
 class CatList(Resource):
-    #Return a list of all cats in the database
+    #Return a list of all cats in the database based on page number and limit, used for pagination
     def get(self):
-        cats = Cat.query.all()
+        page = request.args.get('page', 1, type=int)
+        limit = request.args.get('limit', 10, type=int)
+
+        pagination = Cat.query.order_by(Cat.id).paginate(page=page, per_page=limit, error_out=False)
+    
+        cats = pagination.items
+
         return jsonify([{'id': cat.id, 'api_id': cat.api_id, 'image_url': cat.image_url,
                          'name': cat.name, 'description': cat.description, 'is_favorite': cat.favorite is not None} for cat in cats])
 

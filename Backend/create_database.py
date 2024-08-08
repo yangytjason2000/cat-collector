@@ -58,10 +58,11 @@ def fetch_random_cats():
         print(f"An error occurred while fetching cats: {e}")
 
 if __name__ == '__main__':
-    username = os.getenv('DB_USERNAME')
-    password = os.getenv('DB_PASSWORD')
+    db_username = os.getenv('DB_USERNAME')
+    db_password = os.getenv('DB_PASSWORD')
+    db_port = os.getenv('DB_PORT')
 
-    create_database_and_schema('cat_collector', username, password)
+    create_database_and_schema('cat_collector', db_username, db_password, port=db_port)
 
     with app.app_context():
         fetch_random_cats()
