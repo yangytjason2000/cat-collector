@@ -10,14 +10,11 @@ function CatCard({ cat, onToggleFavorite, onCardClick }) {
     e.stopPropagation();
     if (!cat.is_favorite) {
       setIsPulsing(true);
-    }
-    onToggleFavorite(cat.id, cat.is_favorite);
-
-    if (!cat.is_favorite) {
       setTimeout(() => {
         setIsPulsing(false);
       }, 1000);
     }
+    onToggleFavorite(cat.id, cat.is_favorite);
   };
 
   //To handle when user click on the whole card to see detail information
